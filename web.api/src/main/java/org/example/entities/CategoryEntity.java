@@ -13,9 +13,10 @@ public class CategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreated;
+    @Column(name="date_created", nullable = false,
+            columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
+    private Date timestamp = new Date();
 
     @Column(length = 200, nullable = false)
     private String name;
