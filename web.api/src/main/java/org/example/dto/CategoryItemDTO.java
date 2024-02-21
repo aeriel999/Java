@@ -5,9 +5,9 @@ import java.util.Date;
 @Data
 
 public class CategoryItemDTO {
-    private int id;
+    private Integer id;
     private String name;
     private String image;
     private String description;
-    private Date dateCreated;
+    private String dateCreated;
 }

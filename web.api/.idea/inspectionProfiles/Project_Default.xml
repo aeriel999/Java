@@ -6,15 +6,18 @@
       <option name="ignoredModules">
         <list>
           <option value="web.api" />
+          <option value="web.api" />
         </list>
       </option>
       <option name="ignoredPackages">
         <list>
           <option value="com.jayway.jsonpath:json-path:2.8.0" />
+          <option value="commons-fileupload:commons-fileupload:1.5" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
         </list>
       </option>

@@ -3,6 +3,7 @@ package org.example.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -11,12 +12,10 @@ import java.util.Date;
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="date_created", nullable = false,
-            columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
-    private Date timestamp = new Date();
+    @Column(name="date_created")
+    private LocalDateTime creationTime;
 
     @Column(length = 200, nullable = false)
     private String name;

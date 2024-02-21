@@ -1,2 +1,16 @@
-package org.example.services;public interface CategoryService {
+package org.example.services;
+
+import org.example.dto.CategoryItemDTO;
+import org.example.entities.CategoryEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public interface CategoryService {
+    Page<CategoryItemDTO> getAllCategories(Pageable pageable);
+    CategoryEntity getCategoryById(Integer categoryId);
+    Page<CategoryEntity> searchCategories(String keyword, int page, int size);
 }

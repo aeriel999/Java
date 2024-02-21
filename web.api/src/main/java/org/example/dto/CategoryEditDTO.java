@@ -1,11 +1,12 @@
 package org.example.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class CategoryEditDTO {
-    private int id;
+    private Integer id;
     private String name;
-    private String image;
+    private MultipartFile file;
     private String description;
 }
