@@ -21,18 +21,18 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @Bean
-    CommandLineRunner runner(CategoryRepository categoryRepository, StorageService storageService) {
-        return args -> {
-            storageService.init();
-
-            CategoryEntity category = new CategoryEntity();
-            category.setName("Міні пігі");
-            category.setDescription("Для дорослих людей");
-            category.setImage("pig.jpg");
-            category.setCreationTime(LocalDateTime.now());
-
-            categoryRepository.save(category);
-        };
-    }
+//    @Bean
+//    CommandLineRunner runner(CategoryRepository categoryRepository, StorageService storageService) {
+//        return args -> {
+//            storageService.init();
+//
+//            CategoryEntity category = new CategoryEntity();
+//            category.setName("Міні пігі");
+//            category.setDescription("Для дорослих людей");
+//            category.setImage("pig.jpg");
+//            category.setCreationTime(LocalDateTime.now());
+//
+//            categoryRepository.save(category);
+//        };
+//    }
 }
