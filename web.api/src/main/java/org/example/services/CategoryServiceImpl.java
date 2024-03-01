@@ -2,9 +2,10 @@ package org.example.services;
 
 
 import lombok.AllArgsConstructor;
-import org.example.dto.CategoryCreateDTO;
-import org.example.dto.CategoryEditDTO;
-import org.example.dto.CategoryItemDTO;
+import org.example.dto.category.CategoryCreateDTO;
+import org.example.dto.category.CategoryEditDTO;
+import org.example.dto.category.CategoryItemDTO;
+import org.example.dto.category.CategorySearchResultDTO;
 import org.example.entities.CategoryEntity;
 import org.example.mapper.CategoryMapper;
 import org.example.repositories.CategoryRepository;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -92,7 +92,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<CategoryEntity> searchCategories(String keyword, int page, int size) {
-        return categoryRepository.searchByNameContaining(keyword, PageRequest.of(page, size));
+    public CategorySearchResultDTO searchCategories(String keyword, int page, int size) {
+        var result = categoryRepository.searchByNameContainingIgnoreCase(keyword, PageRequest.of(page, size));
+        var searchResult = new CategorySearchResultDTO();
+        searchResult.setList(categoryMapper.categoryItemDTOList(result.getContent()));
+        searchResult.setTotalCount((int)result.getTotalElements());
+        return searchResult;
     }
 }

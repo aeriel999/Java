@@ -1,9 +1,10 @@
 package org.example.controllers;
 
 import lombok.AllArgsConstructor;
-import org.example.dto.CategoryCreateDTO;
-import org.example.dto.CategoryEditDTO;
-import org.example.dto.CategoryItemDTO;
+import org.example.dto.category.CategoryCreateDTO;
+import org.example.dto.category.CategoryEditDTO;
+import org.example.dto.category.CategoryItemDTO;
+import org.example.dto.category.CategorySearchResultDTO;
 import org.example.entities.CategoryEntity;
 import org.example.services.CategoryService;
 import org.springframework.data.domain.Page;
@@ -62,16 +63,11 @@ public class CategoryController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<CategoryEntity>> searchCategories(
-            @RequestParam String keyword,
+    public ResponseEntity<CategorySearchResultDTO> searchCategories(
+            @RequestParam (defaultValue = "")String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-
-        Page<CategoryEntity> searchResult = categoryService.searchCategories(keyword, page, size);
-
-        if (searchResult.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        CategorySearchResultDTO searchResult = categoryService.searchCategories(keyword, page, size);
 
         return new ResponseEntity<>(searchResult, HttpStatus.OK);
     }

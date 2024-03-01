@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,4 +26,7 @@ public class CategoryEntity {
 
     @Column(length = 40000)
     private String description;
+
+    @OneToMany(mappedBy = "category")
+    private List<ProductEntity> products;
 }
