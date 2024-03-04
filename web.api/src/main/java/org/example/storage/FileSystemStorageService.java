@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.UUID;
 
 @Service
@@ -79,6 +80,30 @@ public class FileSystemStorageService implements StorageService {
         }
         catch (IOException ex) {
             System.out.println("Bad save image "+ ex.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public String SaveImageBase64(String base64, FileSaveFormat format) {
+        try {
+            String ext = format.name().toLowerCase();
+            String randomFileName = UUID.randomUUID().toString() + "."+ext;
+            int [] sizes = {32,150,300,600,1200};
+
+            var bytes = Base64.getDecoder().decode(base64);
+
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+            for(int size: sizes) {
+                String fileSave = rootLocation.toString()+"/"+size+"_"+randomFileName;
+                Thumbnails.of(bufferedImage)
+                        .size(size, size)
+                        .outputFormat(ext)
+                        .toFile(fileSave);
+            }
+            return randomFileName;
+        } catch (IOException ex) {
+            System.out.println("Помилка кодування файлу "+ ex.getMessage());
             return null;
         }
     }

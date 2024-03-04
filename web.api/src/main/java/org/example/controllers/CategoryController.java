@@ -5,6 +5,7 @@ import org.example.dto.category.CategoryCreateDTO;
 import org.example.dto.category.CategoryEditDTO;
 import org.example.dto.category.CategoryItemDTO;
 import org.example.dto.category.CategorySearchResultDTO;
+import org.example.dto.common.SelectItemDTO;
 import org.example.entities.CategoryEntity;
 import org.example.services.CategoryService;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -26,6 +29,12 @@ public class CategoryController {
     public ResponseEntity<Page<CategoryItemDTO>> index(Pageable pageable) {
         Page<CategoryItemDTO> categories = categoryService.getAllCategories(pageable);
         return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("names")
+    public ResponseEntity<List<SelectItemDTO>> names() {
+        var result = categoryService.getNames();
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

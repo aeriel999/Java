@@ -4,10 +4,13 @@ import org.example.dto.category.CategoryCreateDTO;
 import org.example.dto.category.CategoryEditDTO;
 import org.example.dto.category.CategoryItemDTO;
 import org.example.dto.category.CategorySearchResultDTO;
+import org.example.dto.common.SelectItemDTO;
 import org.example.entities.CategoryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface CategoryService {
@@ -17,4 +20,5 @@ public interface CategoryService {
     CategoryItemDTO create(CategoryCreateDTO model);
     CategoryItemDTO edit(CategoryEditDTO model);
     public CategorySearchResultDTO searchCategories(String keyword, int page, int size);
+    List<SelectItemDTO> getNames();
 }
