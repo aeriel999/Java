@@ -6,7 +6,6 @@ import org.example.dto.category.CategoryEditDTO;
 import org.example.dto.category.CategoryItemDTO;
 import org.example.dto.category.CategorySearchResultDTO;
 import org.example.dto.common.SelectItemDTO;
-import org.example.entities.CategoryEntity;
 import org.example.services.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

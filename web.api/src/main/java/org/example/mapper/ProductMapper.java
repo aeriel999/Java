@@ -1,10 +1,8 @@
 package org.example.mapper;
 
 
-import org.example.dto.category.CategoryItemDTO;
 import org.example.dto.product.ProductItemDTO;
-import org.example.entities.CategoryEntity;
-import org.example.entities.ProductEntity;
+import org.example.entities.shop.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

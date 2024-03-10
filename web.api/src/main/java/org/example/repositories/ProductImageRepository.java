@@ -1,7 +1,7 @@
 package org.example.repositories;
 
-import org.example.entities.ProductEntity;
-import org.example.entities.ProductImageEntity;
+import org.example.entities.shop.ProductEntity;
+import org.example.entities.shop.ProductImageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

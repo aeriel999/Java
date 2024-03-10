@@ -7,7 +7,7 @@ import org.example.dto.category.CategoryEditDTO;
 import org.example.dto.category.CategoryItemDTO;
 import org.example.dto.category.CategorySearchResultDTO;
 import org.example.dto.common.SelectItemDTO;
-import org.example.entities.CategoryEntity;
+import org.example.entities.shop.CategoryEntity;
 import org.example.mapper.CategoryMapper;
 import org.example.repositories.CategoryRepository;
 import org.example.storage.FileSaveFormat;

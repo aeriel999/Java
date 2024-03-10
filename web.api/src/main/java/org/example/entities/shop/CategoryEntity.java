@@ -1,10 +1,9 @@
-package org.example.entities;
+package org.example.entities.shop;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
