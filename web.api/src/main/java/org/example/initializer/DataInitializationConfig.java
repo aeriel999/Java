@@ -1,16 +1,20 @@
 package org.example.initializer;
 
 import com.github.javafaker.Faker;
-import org.example.entities.CategoryEntity;
-import org.example.entities.ProductEntity;
-import org.example.entities.ProductImageEntity;
-import org.example.repositories.CategoryRepository;
-import org.example.repositories.ProductImageRepository;
-import org.example.repositories.ProductRepository;
+import lombok.AllArgsConstructor;
+import org.example.constants.Roles;
+import org.example.entities.shop.CategoryEntity;
+import org.example.entities.shop.ProductEntity;
+import org.example.entities.shop.ProductImageEntity;
+import org.example.entities.user.RoleEntity;
+import org.example.entities.user.UserEntity;
+import org.example.entities.user.UserRoleEntity;
+import org.example.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Configuration
+@AllArgsConstructor
 public class DataInitializationConfig {
 
     @Autowired
@@ -30,6 +35,12 @@ public class DataInitializationConfig {
 
     @Autowired
     private ProductImageRepository productImageRepository;
+
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Bean
     @Transactional
@@ -42,9 +53,46 @@ public class DataInitializationConfig {
             if (productRepository.count() < 100) {
                 addSampleProducts();
             }
+
+            seedRole();
+            seedUser();
         };
     }
+    private void seedRole() {
+        if(roleRepository.count() == 0) {
+            RoleEntity admin = RoleEntity
+                    .builder()
+                    .name(Roles.Admin)
+                    .build();
+            roleRepository.save(admin);
+            RoleEntity user = RoleEntity
+                    .builder()
+                    .name(Roles.User)
+                    .build();
+            roleRepository.save(user);
+        }
+    }
 
+    private void seedUser() {
+        if(userRepository.count() == 0) {
+            var user = UserEntity
+                    .builder()
+                    .email("admin@gmail.com")
+                    .firstName("Микола")
+                    .lastName("Підкаблучник")
+                    .phone("+380 97 67 56 464")
+                    .password(passwordEncoder.encode("123456"))
+                    .build();
+            userRepository.save(user);
+            var role = roleRepository.findByName(Roles.Admin);
+            var ur = UserRoleEntity
+                    .builder()
+                    .role(role)
+                    .user(user)
+                    .build();
+            userRoleRepository.save(ur);
+        }
+    }
     private void addSampleCategories() {
         Faker faker = new Faker();
 

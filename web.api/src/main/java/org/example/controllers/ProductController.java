@@ -43,21 +43,20 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity<ProductItemDTO> edit(@Valid @ModelAttribute ProductEditDTO model) {
+    public ResponseEntity<ProductItemDTO> edit(@RequestBody ProductEditDTO model) {
         var result = productService.edit(model);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
     @GetMapping("/search")
     public ResponseEntity<ProductSearchResultDTO> searchProducts(
-            @RequestParam (defaultValue = "")String keywordName,
-            @RequestParam (defaultValue = "")String keywordCategory,
-            @RequestParam (defaultValue = "")String keywordDescription,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "0") int categoryId,
+            @RequestParam(defaultValue = "") String description,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        ProductSearchResultDTO searchResult = productService.searchProducts(keywordName, keywordCategory,
-                keywordDescription, page, size);
-
+        ProductSearchResultDTO searchResult = productService.searchProducts(name, categoryId,
+                description, page, size);
         return new ResponseEntity<>(searchResult, HttpStatus.OK);
     }
+
 }

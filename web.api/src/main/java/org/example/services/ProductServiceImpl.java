@@ -2,12 +2,10 @@ package org.example.services;
 
 import lombok.AllArgsConstructor;
 
-import org.example.dto.category.CategoryItemDTO;
-import org.example.dto.category.CategorySearchResultDTO;
 import org.example.dto.product.*;
-import org.example.entities.CategoryEntity;
-import org.example.entities.ProductEntity;
-import org.example.entities.ProductImageEntity;
+import org.example.entities.shop.CategoryEntity;
+import org.example.entities.shop.ProductEntity;
+import org.example.entities.shop.ProductImageEntity;
 import org.example.mapper.ProductMapper;
 import org.example.repositories.ProductImageRepository;
 import org.example.repositories.ProductRepository;
@@ -22,6 +20,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
+
+import static org.example.specifications.ProductEntitySpecifications.*;
 
 @Service
 @AllArgsConstructor
@@ -95,19 +95,25 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-    @Override
+   @Override
     public ProductItemDTO edit(ProductEditDTO model) {
         var p = productRepository.findById(model.getId());
-        if(p.isPresent())
-        {
+        if (p.isPresent()) {
             try {
                 var product = p.get();
                 var imagesDb = product.getProductImages();
+                //Видаляємо фото, якщо потрібно
                 for (var image : imagesDb) {
                     if (!isAnyImage(model.getOldPhotos(), image)) {
                         productImageRepository.delete(image);
                         storageService.deleteImage(image.getName());
                     }
+                }
+                //Оновляємо пріорітет фото у списку
+                for(var old : model.getOldPhotos()) {
+                    var imgUpdate = productImageRepository.findByName(old.getPhoto());
+                    imgUpdate.setPriority(old.getPriority());
+                    productImageRepository.save(imgUpdate);
                 }
                 var cat = new CategoryEntity();
                 cat.setId(model.getCategory_id());
@@ -126,8 +132,7 @@ public class ProductServiceImpl implements ProductService {
                     pi.setProduct(product);
                     productImageRepository.save(pi);
                 }
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("Edit product is problem " + ex.getMessage());
             }
         }
@@ -148,10 +153,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductSearchResultDTO searchProducts(
-            String keywordName, String keywordCategory, String keywordDescription, int page, int size) {
-        Page<ProductEntity> result = productRepository.searchProducts(
-                "%" + keywordName + "%", "%" + keywordCategory + "%", "%" + keywordDescription + "%",
-                PageRequest.of(page, size));
+            String name, int categoryId,
+            String description, int page, int size) {
+//        Page<ProductEntity> result = productRepository.searchProducts(
+//                "%" + keywordName + "%", "%" + keywordCategory + "%", "%" + keywordDescription + "%",
+//                PageRequest.of(page, size));
+
+        Page<ProductEntity> result = productRepository
+                .findAll(
+                        findByCategoryId(categoryId).and(findByName(name)).and(findByDescription(description)),
+                        PageRequest.of(page, size));
 
         List<ProductItemDTO> products = result.getContent().stream()
                 .map(product -> {
