@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_postTagMap")
+@IdClass(PostTagPK.class)
 public class PostTagMap {
     @Id
     @ManyToOne(cascade = CascadeType.ALL)

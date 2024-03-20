@@ -10,6 +10,7 @@ import org.example.entities.user.RoleEntity;
 import org.example.entities.user.UserEntity;
 import org.example.entities.user.UserRoleEntity;
 import org.example.repositories.*;
+import org.example.services.DatabaseSeeder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +42,8 @@ public class DataInitializationConfig {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final DatabaseSeeder databaseSeeder;
+
 
     @Bean
     @Transactional
@@ -56,6 +59,8 @@ public class DataInitializationConfig {
 
             seedRole();
             seedUser();
+
+            databaseSeeder.SeedAllTables();
         };
     }
     private void seedRole() {
