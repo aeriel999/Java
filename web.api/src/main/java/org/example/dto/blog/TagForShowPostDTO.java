@@ -6,4 +6,5 @@ import lombok.Data;
 public class TagForShowPostDTO {
     private Integer id;
     private String name;
+    private String urlSlug;
 }

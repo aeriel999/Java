@@ -8,10 +8,10 @@ import java.util.List;
 @Data
 public class PostListShowDTO {
 
-    private List<PostEntity> list;
+    private List<PostDTO> list;
     private int totalCount;
 
-    public PostListShowDTO(List<PostEntity> list, int totalCount) {
+    public PostListShowDTO(List<PostDTO> list, int totalCount) {
         this.list = list;
         this.totalCount = totalCount;
     }

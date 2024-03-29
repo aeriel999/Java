@@ -3,18 +3,18 @@ package org.example.controllers;
 
 import lombok.AllArgsConstructor;
 import org.example.dto.blog.PostDTO;
+import org.example.dto.blog.PostListByCategoryDTO;
+import org.example.dto.blog.PostListByTag;
 import org.example.dto.blog.PostListShowDTO;
 import org.example.dto.product.ProductItemDTO;
 import org.example.dto.product.ProductSearchResultDTO;
 import org.example.entities.blog.PostEntity;
 import org.example.services.BlogService;
 import org.example.services.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,26 +24,44 @@ import java.util.List;
 public class BlogController {
     private final BlogService blogService;
     @GetMapping
-    public ResponseEntity<List<PostDTO>> index() {
-        var res = blogService.get();
-        if (res == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else
-            return new ResponseEntity<>(res, HttpStatus.OK);
+    public ResponseEntity<PostListShowDTO> index(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        Page<PostDTO> postPage = blogService.getPostsByPage(page, pageSize);
+        List<PostDTO> posts = postPage.getContent();
+        int totalCount = (int) postPage.getTotalElements();
+        PostListShowDTO postListShowDTO = new PostListShowDTO(posts, totalCount);
+        return ResponseEntity.ok().body(postListShowDTO);
     }
 
-//    @GetMapping("/posts")
-//    public ResponseEntity<PostListShowDTO> showPosts(
-//            @RequestParam(defaultValue = "") String name,
-//            @RequestParam(defaultValue = "0") int categoryId,
-//            @RequestParam(defaultValue = "") String description,
-//            @RequestParam(defaultValue = "") String tag,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "5") int size) {
-//        PostListShowDTO searchResult = productService.searchProducts(name, categoryId,
-//                description, page, size);
-//        return new ResponseEntity<>(searchResult, HttpStatus.OK);
-//    }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostDTO> getPostById(@PathVariable int postId) {
+        return blogService.getPostById(postId)
+                .map(post -> ResponseEntity.ok().body(post))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<PostListByCategoryDTO> getListPostByCategory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) int categoryId) {
+
+        PostListByCategoryDTO postListByCategoryDTO = blogService.getPostsByCategoryId(categoryId, page, pageSize);
+
+        return ResponseEntity.ok().body(postListByCategoryDTO);
+    }
+
+    @GetMapping("/tag")
+    public ResponseEntity<PostListByTag> getListPostByTag(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) int tagId) {
+
+        PostListByTag postListByTag = blogService.getPostsByTagId(tagId, page, pageSize);
+
+        return ResponseEntity.ok(postListByTag);
+    }
 
 }

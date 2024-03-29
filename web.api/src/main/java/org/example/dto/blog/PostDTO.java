@@ -20,5 +20,6 @@ public class PostDTO {
     private LocalDateTime modified;
     private int categoryId;
     private String categoryName;
+    private String categoryUrlSlug;
    private List<TagForShowPostDTO> tags = new ArrayList<>();
 }
